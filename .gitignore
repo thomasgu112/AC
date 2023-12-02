@@ -31,10 +31,12 @@ source/enet/config.status
 source/enet/libenet.la
 source/enet/libenet.pc
 source/enet/libtool
+source/enet/configure
 source/src/ac_client
 source/src/ac_server
 source/src/cube.h.gch
 source/src/Makefile_local
+source/xcode/*
 clientlog*.txt
 dumpmapconfig.txt
 packetlog.txt
