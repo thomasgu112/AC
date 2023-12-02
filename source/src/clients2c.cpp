@@ -710,6 +710,18 @@ void parsemessages(int cn, playerent *d, ucharbuf &p, bool demo = false)
                 break;
             }
 
+            case SV_BLOOD:
+            {
+                player1->health -= 20;
+				if(player1->health <= 0) dokill(player1, player1, type==SV_GIBDIED, 0);
+                break;
+            }
+
+            case SV_NECTAR:
+            {
+                break;
+            }
+
             case SV_GIBDAMAGE:
             case SV_DAMAGE:
             {

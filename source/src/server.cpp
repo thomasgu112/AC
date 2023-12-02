@@ -1831,11 +1831,11 @@ int spawntime(int type)
 bool serverpickup(int i, int sender)         // server side item pickup, acknowledge first client that gets it
 {
     const char *hn = sender >= 0 && clients[sender]->type == ST_TCPIP ? clients[sender]->hostname : NULL;
-    if(!sg->sents.inrange(i))
-    {
-        if(hn && !m_coop) mlog(ACLOG_INFO, "[%s] tried to pick up entity #%d - doesn't exist on this map", hn, i);
-        return false;
-    }
+    //if(!sg->sents.inrange(i))
+    //{
+    //    if(hn && !m_coop) mlog(ACLOG_INFO, "[%s] tried to pick up entity #%d - doesn't exist on this map", hn, i);
+    //    return false;
+    //}
     server_entity &e = sg->sents[i];
     if(!e.spawned)
     {
@@ -4525,6 +4525,26 @@ void linequalitystats(int elapsed)
 
 SERVPARLIST(mandatory_auth, 0, 1, 0, endis, "sEnforce IDs for all clients even on unlisted server/LAN game");
 
+void blood(int diff)
+{
+    static int msTime = 0;
+    msTime += diff;
+    if(msTime <= 3000) return;
+    msTime = 0;
+    loopv(clients) sendf(i, 1, "ri1", SV_BLOOD);
+    return;
+}
+
+void nectar(int diff)
+{
+    static int msTime = 0;
+    msTime += diff;
+    if(msTime <= 6000) return;
+	msTime = 0;
+    loopv(clients) sendf(i, 1, "ri1", SV_NECTAR);
+    return;
+}
+
 void serverslice(uint timeout)   // main server update, called from cube main loop in sp, or dedicated server loop
 {
     static int msend = 0, mrec = 0, csend = 0, crec = 0, mnum = 0, cnum = 0;
@@ -4547,6 +4567,11 @@ void serverslice(uint timeout)   // main server update, called from cube main lo
         silenttimeupdate(sg->gamemillis, gametimemaximum);
     }
 #endif
+
+    if(m_rpr)
+    {
+        blood(diff);
+    }
 
     if(sg->minremain > 0 && !sg->sispaused)
     {
