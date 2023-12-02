@@ -1837,11 +1837,11 @@ bool serverpickup(int i, int sender)         // server side item pickup, acknowl
     //    return false;
     //}
     server_entity &e = sg->sents[i];
-    if(!e.spawned)
-    {
-        if(!e.legalpickup && hn && !m_demo) mlog(ACLOG_INFO, "[%s] tried to pick up entity #%d (%s) - can't be picked up in this gamemode or at all", hn, i, entnames[e.type]);
-        return false;
-    }
+    //if(!e.spawned)
+    //{
+    //    if(!e.legalpickup && hn && !m_demo) mlog(ACLOG_INFO, "[%s] tried to pick up entity #%d (%s) - can't be picked up in this gamemode or at all", hn, i, entnames[e.type]);
+    //    return false;
+    //}
     if(sender>=0)
     {
         client *cl = clients[sender];
@@ -4529,7 +4529,7 @@ void blood(int diff)
 {
     static int msTime = 0;
     msTime += diff;
-    if(msTime <= 3000) return;
+    if(msTime <= 2000) return;
     msTime = 0;
     loopv(clients) sendf(i, 1, "ri1", SV_BLOOD);
     return;
@@ -4539,7 +4539,7 @@ void nectar(int diff)
 {
     static int msTime = 0;
     msTime += diff;
-    if(msTime <= 6000) return;
+    if(msTime <= 4000) return;
 	msTime = 0;
     loopv(clients) sendf(i, 1, "ri1", SV_NECTAR);
     return;
@@ -4571,6 +4571,7 @@ void serverslice(uint timeout)   // main server update, called from cube main lo
     if(m_rpr)
     {
         blood(diff);
+		nectar(diff);
     }
 
     if(sg->minremain > 0 && !sg->sispaused)

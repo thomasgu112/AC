@@ -719,6 +719,32 @@ void parsemessages(int cn, playerent *d, ucharbuf &p, bool demo = false)
 
             case SV_NECTAR:
             {
+				int amount = 5;
+				float necAngle = 2.0*355/113.0/amount;
+
+				static int init = 0;
+				if(!init)
+				{
+					loopi(amount) ents.add().type = NOTUSED;
+					init = 1;
+				}
+				
+				loopi(amount)
+				{
+					int j = ents.ulen - i - 1;
+					ents[j].type = I_HEALTH;
+					ents[j].x = player1->o.x + 10*cosf(necAngle*i);
+					ents[j].y = player1->o.y + 10*sinf(necAngle*i);
+					ents[j].z = player1->o.z;
+					ents[j].attr1 = 0;
+					ents[j].attr2 = 0;
+					ents[j].attr3 = 0;
+					ents[j].attr4 = 0;
+					ents[j].attr5 = 0;
+					ents[j].attr6 = 0;
+					ents[j].attr7 = 0;
+					ents[j].spawned = true;
+				}
                 break;
             }
 
